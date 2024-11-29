@@ -30,9 +30,10 @@ if ($choice -eq "1")
       #$resolvedItemPath = $item -replace "^~", $env:USERPROFILE
       $itemName = Split-Path -Path $item -Leaf
       $destinationItem = Join-Path -Path $currentDir -ChildPath $itemName
-      if (Test-Path -Path $destinationItem -PathType Container) {
-            Remove-Item -Path $destinationItem -Recurse -Force
-        }
+      if (Test-Path -Path $destinationItem -PathType Container)
+      {
+        Remove-Item -Path $destinationItem -Recurse -Force
+      }
       # Copy files and directories recursively
       Copy-Item -Path $item -Destination $destinationItem -Recurse -Force
       Write-Host "Copied: $item to $destinationItem"
@@ -43,6 +44,12 @@ if ($choice -eq "1")
   }
 } elseif ($choice -eq "2")
 {
+  $answer = Read-Host "Do you want to proceed? This will overwrite your local files (y/n)"
+  if ($answer -ne "y")
+  {
+    Write-Host "You chose No. Exiting..."
+    exit
+  }
   foreach ($item in $sourceItems)
   {
     # Resolve any potential tilde (~) paths
@@ -57,6 +64,11 @@ if ($choice -eq "1")
       if (!(Test-Path -Path $targetDir))
       {
         New-Item -ItemType Directory -Path $targetDir -Force
+      }
+
+      if (Test-Path -Path $item -PathType Container)
+      {
+        Remove-Item -Path $item -Recurse -Force
       }
 
       # Copy files and directories recursively
