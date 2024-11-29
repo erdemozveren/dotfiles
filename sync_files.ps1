@@ -30,7 +30,9 @@ if ($choice -eq "1")
       #$resolvedItemPath = $item -replace "^~", $env:USERPROFILE
       $itemName = Split-Path -Path $item -Leaf
       $destinationItem = Join-Path -Path $currentDir -ChildPath $itemName
-
+      if (Test-Path -Path $destinationItem -PathType Container) {
+            Remove-Item -Path $destinationItem -Recurse -Force
+        }
       # Copy files and directories recursively
       Copy-Item -Path $item -Destination $destinationItem -Recurse -Force
       Write-Host "Copied: $item to $destinationItem"

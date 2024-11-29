@@ -100,6 +100,7 @@ config.keys = {
 					relative = true,
 					restore_text = true,
 					on_pane_restore = resurrect.tab_state.default_on_pane_restore,
+					window = win:mux_window(),
 				}
 				if type == "workspace" then
 					local state = resurrect.load_state(id, "workspace")
