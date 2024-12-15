@@ -39,11 +39,3 @@ function _G.set_terminal_keymaps()
   vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
   vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
 end
-
--- typescript tools lsp keymaps
-vim.keymap.set("n", "üd", "<cmd>TSToolsGoToSourceDefinition<cr>")
-vim.keymap.set("n", "üio", "<cmd>TSToolsOrganizeImports<cr>")
-vim.keymap.set("n", "üis", "<cmd>TSToolsSortImports<cr>")
-vim.keymap.set("n", "üir", "<cmd>TSToolsRemoveUnusedImports<cr>")
-vim.keymap.set("n", "üf", "<cmd>TSToolsFixAll<cr>")
-vim.keymap.set("n", "ür", "<cmd>TSToolsFileReferences<cr>")

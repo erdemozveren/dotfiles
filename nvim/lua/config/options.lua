@@ -16,6 +16,8 @@ end
 
 vim.opt.scrolloff = 30
 vim.opt.wrap = true
+vim.g.snacks_animate = false
+
 -- plugins sub leader key
 vim.g.maplocalleader = ","
 
