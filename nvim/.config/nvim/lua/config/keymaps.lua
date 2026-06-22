@@ -3,29 +3,22 @@
 -- Add any additional keymaps here
 
 -- terminal
+-- Delete defaults
 vim.keymap.del({ "n", "t" }, "<C-/>")
-vim.keymap.del({ "n", "t" }, "<C-_>")
-
+-- added c-_ mapped to c-/ to make it work in some terminals
 vim.keymap.set(
   { "n", "t" },
   "<C-/>",
   "<cmd>ToggleTerm direction=horizontal <CR>",
   { desc = "Open horizontal terminal split", remap = true }
 )
--- added c-_ mapped to c-/ to make it work in some terminals
-vim.keymap.set(
-  { "n", "t" },
-  "<C-_>",
-  "<cmd>ToggleTerm direction=horizontal <CR>",
-  { desc = "which_key_ignore", remap = true }
-)
 -- Prevent visual paste from overwriting yank register
-vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without overwriting yank" })
+vim.keymap.set("x", "p", '"_dP', { desc = "Paste without overwriting yank" })
 -- vim.keymap.set("n", "<leader>th", ":ToggleTerm direction=horizontal <CR>", { desc = "Open horizontal terminal split" })
 -- vim.keymap.set("n", "<leader>tv", ":ToggleTerm direction=vertical <CR>", { desc = "Open vertical terminal split" })
 
 -- move lines
---  These now handled by nvim-mini/mini.move
+-- These now handled by nvim-mini/mini.move
 -- vim.keymap.set("n", "<A-j>", "<cmd>m .+1<CR>==") -- move line up(n)
 -- vim.keymap.set("n", "<A-k>", "<cmd>m .-2<CR>==") -- move line down(n)
 -- vim.keymap.set("v", "<A-j>", "<cmd>m '>+1<CR>gv=gv") -- move line up(v)
