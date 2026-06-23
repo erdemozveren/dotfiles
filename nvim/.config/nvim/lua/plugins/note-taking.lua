@@ -51,6 +51,15 @@ end
 
 return {
   {
+    "MeanderingProgrammer/render-markdown.nvim",
+    -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.nvim" }, -- if you use the mini.nvim suite
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-mini/mini.icons" }, -- if you use standalone mini plugins
+    -- dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
+  {
     "jakewvincent/mkdnflow.nvim",
     config = function()
       require("mkdnflow").setup({})
@@ -63,7 +72,7 @@ return {
       end, { desc = "Open Notes Index (Float)" })
 
       -- Open Index in a Standard Buffer (Triggers Bash Script)
-      vim.keymap.set("n", note_leader .. "b", function()
+      vim.keymap.set("n", note_leader .. "i", function()
         run_shell_indexer()
         vim.cmd("edit " .. notes_dir .. "/index.md")
       end, { desc = "Open Notes Index (Buffer)" })
