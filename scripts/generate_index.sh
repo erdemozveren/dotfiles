@@ -1,51 +1,129 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Automatically detect the directory where this script is located
-NOTES_DIR="$(cd "$(dirname "${BASH_SOURCE}")" && pwd)"
+NOTES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INDEX_FILE="$NOTES_DIR/index.md"
 
-# Use unique temporary files for sorting safely
-TMP_PROJECTS=$(mktemp)
-TMP_NOTES=$(mktemp)
+projects=()
+notes=()
 
-# Scan directory contents
+# ----------------------------
+# Helper: get first H1 title
+# ----------------------------
+get_title() {
+    local file="$1"
+    local mode="${2:-file}"   # file | project
+
+    local title
+    title=$(grep -m 1 '^# ' "$file" 2>/dev/null | sed 's/^# //')
+
+    if [ -z "$title" ]; then
+        local fallback
+        if [ "$mode" = "project" ]; then
+            fallback="$(basename "$(dirname "$file")")"
+        else
+            fallback="$(basename "$file" .md)"
+        fi
+
+        title="$(printf '%s' "$fallback" \
+            | sed 's/[-_]/ /g' \
+            | sed 's/\b\(.\)/\u\1/g')"
+    fi
+
+    echo "$title"
+}
+# ----------------------------
+# Scan root directory
+# ----------------------------
 for item in "$NOTES_DIR"/*; do
     [ -e "$item" ] || continue
-    name=$(basename "$item")
-    
-    # Skip index.md, hidden files, and the script itself
-    if [ "$name" = "index.md" ] || [[ "$name" == .* ]] || [[ "$name" == *.sh ]]; then
-        continue
-    fi
-    
+    name="$(basename "$item")"
+
+    [[ "$name" == "index.md" || "$name" == .* || "$name" == *.sh ]] && continue
+
     if [ -d "$item" ]; then
-        # Subfolders are treated as Projects - Links to the inner index.md file
-        echo "- [$name]($name/index.md)" >> "$TMP_PROJECTS"
+        projects+=("$name")
     elif [[ "$name" == *.md ]]; then
-        # Root markdown files are treated as General Notes
-        note_name="${name%.md}"
-        echo "- [$note_name]($name)" >> "$TMP_NOTES"
+        notes+=("$name")
     fi
 done
 
-# Build the structured markdown file with standard Markdown syntax
+# ----------------------------
+# Tree printer (2 levels only)
+# ----------------------------
+print_project_tree() {
+    local project_dir="$1"
+
+    children=()
+
+    for child in "$project_dir"/*.md; do
+        [ -e "$child" ] || continue
+        child_name="$(basename "$child")"
+
+        [[ "$child_name" == "index.md" ]] && continue
+
+        children+=("$child_name")
+    done
+
+    # sort children
+    IFS=$'\n' sorted=($(printf '%s\n' "${children[@]}" | sort))
+    unset IFS
+
+    total=${#sorted[@]}
+    i=0
+
+    for child_file in "${sorted[@]}"; do
+        i=$((i + 1))
+
+        file_path="$project_dir/$child_file"
+        title="$(get_title "$file_path")"
+        rel_path="$(basename "$project_dir")/$child_file"
+
+        if [ $i -eq $total ]; then
+            echo "  └── [$title]($rel_path)"
+        else
+            echo "  ├── [$title] ($rel_path)"
+        fi
+    done
+}
+
+# ----------------------------
+# Generate index
+# ----------------------------
 {
-    echo "# 📒 My Wiki ($NOTES_DIR)"
-    echo ""
+    echo "# 📒 My Wiki"
+    echo
+
     echo "## 🚀 Projects"
-    
-    if [ -s "$TMP_PROJECTS" ]; then
-        sort "$TMP_PROJECTS"
+    echo
+
+    if [ ${#projects[@]} -gt 0 ]; then
+        printf '%s\n' "${projects[@]}" | sort | while read -r project; do
+            project_dir="$NOTES_DIR/$project"
+            index_file="$project_dir/index.md"
+
+            if [ -f "$index_file" ]; then
+                project_title="$(get_title "$index_file" project)"
+            else
+                project_title="$project"
+            fi
+
+            echo "- 📁 [$project_title]($project/index.md)"
+
+            print_project_tree "$project_dir"
+
+            echo
+        done
     fi
-    
-    echo ""
+
     echo "## 📂 General Notes"
-    
-    if [ -s "$TMP_NOTES" ]; then
-        sort "$TMP_NOTES"
+    echo
+
+    if [ ${#notes[@]} -gt 0 ]; then
+        printf '%s\n' "${notes[@]}" | sort | while read -r note; do
+            note_path="$NOTES_DIR/$note"
+            note_title="$(get_title "$note_path")"
+            echo "- [$note_title]($note)"
+        done
     fi
 } > "$INDEX_FILE"
-
-# Clean up temporary files
-rm "$TMP_PROJECTS" "$TMP_NOTES"
-
