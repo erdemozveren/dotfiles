@@ -82,7 +82,7 @@ print_project_tree() {
         if [ $i -eq $total ]; then
             echo "  └── [$title]($rel_path)"
         else
-            echo "  ├── [$title] ($rel_path)"
+            echo "  ├── [$title]($rel_path)"
         fi
     done
 }
