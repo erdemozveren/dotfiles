@@ -21,7 +21,14 @@ end
 local function launch_nvim_float(file_path)
   Snacks.terminal.open({ "nvim", file_path }, {
     cwd = notes_dir,
-    win = { position = "float", height = 0.85, width = 0.85, border = "rounded" },
+    win = {
+      position = "float",
+      height = 0.85,
+      width = 0.85,
+      border = "rounded",
+      title = "   Notes ",
+      title_pos = "center",
+    },
   })
 end
 
@@ -78,12 +85,12 @@ return {
       end, { desc = "Open Notes Index (Buffer)" })
 
       -- Search filenames inside notes directory
-      vim.keymap.set("n", note_leader .. "n", function()
+      vim.keymap.set("n", note_leader .. "f", function()
         open_picker("files", "My Notes")
       end, { desc = "Search Note Files" })
 
       -- Live grep text inside notes directory
-      vim.keymap.set("n", note_leader .. "g", function()
+      vim.keymap.set("n", note_leader .. "s", function()
         open_picker("grep", "Grep Notes")
       end, { desc = "Search Inside Notes" })
 
@@ -97,6 +104,7 @@ return {
 
       -- Open yazi in notes dir
       vim.keymap.set("n", note_leader .. "e", function()
+        run_shell_indexer()
         Snacks.terminal.open({ "yazi", notes_dir }, {
           cwd = notes_dir,
           win = { position = "float", height = 0.85, width = 0.85, border = "rounded" },
