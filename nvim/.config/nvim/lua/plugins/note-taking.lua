@@ -17,21 +17,6 @@ local function run_shell_indexer()
   end
 end
 
--- Centralized wrapper to launch Neovim processes inside the floating window
-local function launch_nvim_float(file_path)
-  Snacks.terminal.open({ "nvim", file_path }, {
-    cwd = notes_dir,
-    win = {
-      position = "float",
-      height = 0.85,
-      width = 0.85,
-      border = "rounded",
-      title = "   Notes ",
-      title_pos = "center",
-    },
-  })
-end
-
 -- Centralized picker configuration for searching files and text
 local function open_picker(picker_type, title_text)
   Snacks.picker[picker_type]({
@@ -49,7 +34,7 @@ local function open_picker(picker_type, title_text)
       open_float_action = function(picker, item)
         picker:close()
         if item and item.file then
-          launch_nvim_float(item.file)
+          vim.cmd("edit " .. notes_dir .. "/" .. vim.fn.fnameescape(item.file))
         end
       end,
     },
@@ -69,20 +54,33 @@ return {
   {
     "jakewvincent/mkdnflow.nvim",
     config = function()
-      require("mkdnflow").setup({})
+      require("mkdnflow").setup({
+        perspective = {
+          priority = "root",
+          root_marker = "index.md", -- IMPORTANT
+          sync_cwd = false,
+          update_on_navigate = true,
+        },
+        silent = true, -- dont show annoying notifications
+        links = {
+          style = "markdown",
+          implicit_extension = "md",
+        },
+      })
 
       -- This keybindings are not for mkdnflow,it just my custom wiki
-      -- Open Index in a Floating Window (Triggers Bash Script)
-      vim.keymap.set("n", note_leader .. "\\", function()
-        run_shell_indexer()
-        launch_nvim_float(notes_dir .. "/index.md")
-      end, { desc = "Open Notes Index (Float)" })
-
       -- Open Index in a Standard Buffer (Triggers Bash Script)
-      vim.keymap.set("n", note_leader .. "i", function()
+      vim.keymap.set("n", note_leader .. "\\", function()
         run_shell_indexer()
         vim.cmd("edit " .. notes_dir .. "/index.md")
       end, { desc = "Open Notes Index (Buffer)" })
+
+      -- Open Index in a New Tab (Triggers Bash Script)
+      vim.keymap.set("n", note_leader .. "n", function()
+        run_shell_indexer()
+        vim.cmd("tabnew")
+        vim.cmd("edit " .. notes_dir .. "/index.md")
+      end, { desc = "Open Notes Index (New Tab)" })
 
       -- Search filenames inside notes directory
       vim.keymap.set("n", note_leader .. "f", function()
