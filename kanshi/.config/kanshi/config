@@ -1,8 +1,13 @@
-profile Dock {
+profile dock {
     output eDP-1 disable
     output DP-1 enable
 }
 
-profile Laptop {
+profile both {
+    output eDP-1 enable
+    output DP-1 enable
+}
+
+profile laptop {
     output eDP-1 enable
 }
