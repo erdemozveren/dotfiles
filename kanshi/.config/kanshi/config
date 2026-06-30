@@ -1,10 +1,10 @@
-profile dock {
-    output eDP-1 disable
+profile both {
+    output eDP-1 enable
     output DP-1 enable
 }
 
-profile both {
-    output eDP-1 enable
+profile dock {
+    output eDP-1 disable
     output DP-1 enable
 }
 
