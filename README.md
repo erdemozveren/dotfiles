@@ -21,7 +21,7 @@ pacman -Syu git stow kanshi keyd fd fzf ripgrep mise tmux yazi tuxedo
 
 3. Deploy configurations by creating symlinks via Stow:
    ```bash
-   stow -v tmux kanshi nvim omarchy-hypr alacritty
+   stow -v tmux kanshi nvim omarchy-hypr foot
    # keyd needs sudo privileges to write to /etc
    sudo stow -t /etc/keyd keyd
    # Reload keyd
@@ -45,7 +45,7 @@ My personal setup for managing notes and tasks directly from the terminal as pla
 
 - Neovim v0.12.2
 - keyd v2.6.0
-- Alacritty already installed in Omarchy (v0.17)
+- Foot already installed in Omarchy (v1.27.0) (Previously Alacritty was used)
 - tmux uses [TPM](https://github.com/tmux-plugins/tpm) for plugins (The default leader key is Alt+q)
 
 ## Disclaimer
