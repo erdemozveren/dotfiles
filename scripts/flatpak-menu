@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+choice=$(flatpak list --app --columns=name,application | \
+    walker -d -p "Launch Flatpak")
+
+[ -z "$choice" ] && exit 0
+
+appid=$(printf "%s" "$choice" | awk -F'\t' '{print $2}')
+
+notify-send "Flatpak" "Launching $(printf "%s" "$choice" | awk -F'\t' '{print $1}')"
+
+exec flatpak run "$appid"

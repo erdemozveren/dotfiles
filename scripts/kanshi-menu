@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# Detect kanshi config
+CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/kanshi/config"
+
+# Extract profile names (lines starting with 'profile NAME {')
+profiles=$(grep -oP '^profile\s+\K[^ ]+' "$CONFIG")
+current=$(kanshictl status | awk '{print $3}')
+
+# Let the user pick a profile via walker -d (dmenu alternative)
+choice=$(printf "%s\n" $profiles | walker -d -p "Current profile: $current")
+
+[ -z "$choice" ] && exit 0
+
+# Reload kanshi with selected profile
+notify-send "Kanshi" "Switching to profile: $choice"
+
+kanshictl switch $choice
