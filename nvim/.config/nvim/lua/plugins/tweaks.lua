@@ -65,23 +65,18 @@ return {
     opts = {
       inlay_hints = { enabled = false },
       servers = {
-        -- vtsls (TypeScript) ayarları
         vtsls = {
           on_attach = function(client)
-            -- Biçimlendirme yeteneğini kapat
-            client.server_capabilities.documentFormattingProvider = false
-            client.server_capabilities.documentRangeFormattingProvider = false
+            -- client.server_capabilities.documentFormattingProvider = false
+            -- client.server_capabilities.documentRangeFormattingProvider = false
           end,
         },
-        -- vue_ls (Volar) ayarları
         vue_ls = {
           on_attach = function(client)
-            -- Biçimlendirme yeteneğini kapat
             client.server_capabilities.documentFormattingProvider = false
             client.server_capabilities.documentRangeFormattingProvider = false
           end,
         },
-        -- eslint ayarları
         eslint = {
           settings = {
             workingDirectories = { mode = "auto" },

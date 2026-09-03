@@ -1,13 +1,4 @@
 return {
-  -- {
-  --   "Mofiqul/vscode.nvim",
-  --   version = "*",
-  --   -- lazy = false,
-  --   -- priority = 1000,
-  --   opts = {
-  --     -- transparent = true,
-  --   },
-  -- },
   -- { "catppuccin/nvim", name = "catppuccin", lazy = false, priority = 1000 },
   -- {
   --   "folke/tokyonight.nvim",
@@ -32,11 +23,23 @@ return {
   --   -- end,
   -- },
   {
-    "RRethy/base16-nvim",
+    "dgox16/oldworld.nvim",
+    priority = 1000,
     lazy = false,
+    config = function()
+      require("oldworld").setup({
+        variant = "default",
+      })
+      vim.cmd.colorscheme("oldworld")
+    end,
+  },
+  {
+    "RRethy/base16-nvim",
+    lazy = true,
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme("base16-gruvbox-material-dark-hard")
+      -- vim.cmd.colorscheme("base16-gruvbox-material-dark-hard")
+      -- vim.cmd.colorscheme("base16-ashes")
     end,
   },
   -- {

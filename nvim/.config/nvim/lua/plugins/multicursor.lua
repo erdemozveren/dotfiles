@@ -1,16 +1,19 @@
-if true then
-  return {}
-end -- remove to work
+-- if true then
+--   return {}
+-- end -- remove to work
 return {
   {
     "mg979/vim-visual-multi",
     branch = "master",
+    lazy = false,
     init = function()
-      -- vim.g.VM_default_mappings = 0
+      vim.g.VM_default_mappings = 1
       vim.g.VM_maps = {
         ["Find Under"] = "<C-n>",
-        ["Add Cursor Down"] = "<C-M-j>",
-        ["Add Cursor Up"] = "<C-M-k>",
+        ["Add Cursor Down"] = "<C-A-j>",
+        ["Add Cursor Up"] = "<C-A-k>",
+        ["Select l"] = "",
+        ["Select r"] = "",
       }
     end,
     -- init = function()
