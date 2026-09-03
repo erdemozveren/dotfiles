@@ -5,13 +5,13 @@ local omarchy_gdk_scale = 2
 local omarchy_monitor_scale = "auto"
 
 hl.env("GDK_SCALE", tostring(omarchy_gdk_scale))
-hl.monitor({ output = "", mode = "preferred", position = "auto", scale = omarchy_monitor_scale })
+-- hl.monitor({ output = "", mode = "preferred", position = "auto", scale = omarchy_monitor_scale })
 -- Configure DP-1
 hl.monitor({
 	output = "DP-1",
 	mode = "2560x1440@144",
 	position = "auto",
-	scale = 1.33,
+	scale = 1.25,
 })
 
 -- Configure eDP-1
@@ -19,7 +19,7 @@ hl.monitor({
 	output = "eDP-1",
 	mode = "preferred",
 	position = "auto",
-	scale = omarchy_monitor_scale,
+	scale = 1,
 })
 
 -- Assign workspace 1 to DP-1
